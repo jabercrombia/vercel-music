@@ -18,6 +18,9 @@ export const metadata: Metadata = {
   },
 }
 
+// Required by Next.js App Router — every app needs a root layout.
+// <html> and <body> are rendered in app/[locale]/layout.tsx instead so
+// the lang attribute can be set dynamically from the locale URL param.
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return children
 }
