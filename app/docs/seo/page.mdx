@@ -1,0 +1,79 @@
+# SEO
+
+## Goals
+
+- Every trends page and artist page is indexable and returns meaningful metadata to crawlers.
+- Social shares (Twitter/X, Slack, iMessage) show a rich preview card with a title, description, and generated image.
+- Google understands which locale is canonical for each URL and avoids treating locale variants as duplicate content.
+- Structured data enables rich results for artist pages in Google Search.
+
+---
+
+## Implemented
+
+### `metadataBase`
+
+Set in `app/layout.tsx`. Required for Next.js to resolve relative OG image URLs into absolute URLs.
+
+```ts
+metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://vercel-music.vercel.app')
+```
+
+### Title template
+
+```ts
+title: { template: '%s — Global Music Trends', default: 'Global Music Trends' }
+```
+
+### Per-page `generateMetadata`
+
+| Field | Trends page | Artist page |
+|---|---|---|
+| `title` | `Trending in [Country]` | Artist name |
+| `description` | `Top trending tracks and artists in [Country]…` | First 155 chars of Last.fm bio |
+| `openGraph.type` | `website` | `profile` |
+| `openGraph.images` | Generated OG image | Artist image from Last.fm |
+| `twitter.card` | `summary_large_image` | `summary_large_image` or `summary` |
+
+### Canonical URLs
+
+Each page sets `alternates.canonical` to its own locale-prefixed path, preventing Google from choosing an arbitrary URL as canonical.
+
+### hreflang alternate links
+
+Each page sets `alternates.languages` with an entry for every supported locale, telling Google that `/en/trends/france` and `/fr/trends/france` are translations of the same page, not duplicates.
+
+### JSON-LD structured data (artist pages)
+
+Artist pages emit a `MusicGroup` schema block. Fields populated: `name`, `description`, `image`, `url`, `genre`. This enables rich results in Google Search.
+
+### Generated OG images
+
+Both route types have a co-located `opengraph-image.tsx` (1200×630 PNG via `next/og`):
+
+- **Trends pages** — country flag emoji, country name, site name.
+- **Artist pages** — artist name, site name.
+
+### `generateStaticParams` (trends pages)
+
+All locale × country combinations are pre-rendered at build time so crawlers always receive fully rendered HTML with no ISR wait on first visit.
+
+---
+
+## Environment variable
+
+| Variable | Purpose |
+|---|---|
+| `NEXT_PUBLIC_SITE_URL` | Absolute base URL used in `metadataBase`, canonical links, and OG image URLs. Must be set in Vercel project settings for production. |
+
+---
+
+## Not implemented / future work
+
+| Item | Notes |
+|---|---|
+| `sitemap.xml` | Add with `app/sitemap.ts` enumerating all locale × country trend pages. |
+| `robots.txt` | Add with `app/robots.ts`. |
+| Artist `generateStaticParams` | Not feasible without a bounded artist list — ISR handles on-demand. |
+| Breadcrumb structured data | Could improve SERP display. |
+| OG image with artist photo | Fetch Last.fm image inside `opengraph-image.tsx` and composite it. |
