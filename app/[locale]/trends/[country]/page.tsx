@@ -1,4 +1,5 @@
 import { Suspense } from 'react'
+import Link from 'next/link'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { getTopTracks, getTopArtists } from '@/lib/lastfm'
 import { countryDisplayNames } from '@/lib/countries'
@@ -95,6 +96,11 @@ export default async function TrendsPage({
           </>
         )}
       </div>
+      <footer className="border-t border-zinc-800 mt-16 py-6 text-center text-sm text-zinc-500">
+        <Link href="/docs" className="hover:text-zinc-300 transition-colors">
+          Docs
+        </Link>
+      </footer>
     </main>
   )
 }
