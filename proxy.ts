@@ -31,6 +31,8 @@ function detectLocale(req: NextRequest): string {
   return routing.defaultLocale
 }
 
+// Run middleware only on the root URL and locale-prefixed routes.
+// Skips static files, images, and internal Next.js paths (_next/*).
 export const config = {
-  matcher: ['/', '/(en|es|no|it|fr)/:path*'],
+  matcher: ['/', '/(en|es|no|it|fr|de)/:path*'],
 }
