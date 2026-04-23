@@ -3,6 +3,8 @@ import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import type { Artist } from '@/lib/lastfm'
 
+
+// format the number output M/K
 function formatListeners(n: string) {
   const num = parseInt(n, 10)
   if (isNaN(num)) return n
@@ -44,6 +46,9 @@ export default async function ArtistGrid({ artists }: { artists: Artist[] }) {
                     fill
                     className="object-cover"
                     sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                    // first 4 images are loaded as a priority rest are just lazy
+                    loading={i < 4 ? 'eager' : 'lazy'}
+                    priority={i < 4}
                   />
                 ) : (
                   <div className="absolute inset-0 flex items-center justify-center text-4xl text-zinc-600">

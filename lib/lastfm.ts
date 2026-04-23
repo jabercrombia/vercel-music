@@ -17,6 +17,7 @@ export interface Artist {
 }
 
 export interface ArtistInfo {
+  stats: any
   name: string
   listeners: string
   playcount: string
@@ -75,7 +76,7 @@ export async function getTopTracks(countrySlug: string): Promise<Track[]> {
 export async function getTopArtists(countrySlug: string): Promise<Artist[]> {
   const country = slugToName(countrySlug)
   const res = await fetch(
-    `${BASE}?method=geo.getTopArtists&country=${encodeURIComponent(country)}&api_key=${KEY}&format=json&limit=10`,
+    `${BASE}?method=geo.getTopArtists&country=${encodeURIComponent(country)}&api_key=${KEY}&format=json&limit=8`,
     { next: { revalidate: 3600 } }
   )
   const data = await res.json()

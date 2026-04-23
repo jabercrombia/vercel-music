@@ -27,6 +27,11 @@ function stripHtml(html: string) {
   return html.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim()
 }
 
+function cleanBio(text: string): string {
+  // Last.fm appends "Read more on Last.fm." — remove it so we can link manually
+  return text.replace(/\s*read more on last\.fm\.?\s*$/i, '').trim()
+}
+
 export async function generateMetadata({
   params,
 }: {
@@ -90,7 +95,7 @@ export default async function ArtistPage({
   if (!artist) notFound()
 
   const imageUrl = getLargestImage(artist.image)
-  const bio = stripHtml(artist.bio?.summary ?? '')
+  const bio = cleanBio(stripHtml(artist.bio?.summary ?? ''))
   const similar = artist.similar?.artist?.slice(0, 5) ?? []
   const tags = artist.tags?.tag?.slice(0, 5) ?? []
 
@@ -117,20 +122,17 @@ export default async function ArtistPage({
         </Link>
 
         {/* Hero */}
-        <div className="flex flex-col sm:flex-row gap-6 items-start">
+        <div className="flex flex-col sm:flex-row gap-6 items-start mt-4">
           <div className="relative w-40 h-40 shrink-0 rounded-lg overflow-hidden bg-muted">
             {imageUrl ? (
-              <Image src={imageUrl} alt={artist.name} fill className="object-cover" sizes="160px" />
+              <Image src={imageUrl} alt={artist.name} fill className="object-cover" sizes="160px" loading="eager" priority />
             ) : (
               <div className="absolute inset-0 flex items-center justify-center text-5xl text-muted-foreground">🎤</div>
             )}
           </div>
           <div className="space-y-2">
             <h1 className="text-4xl font-bold">{artist.name}</h1>
-            <div className="flex gap-4 text-zinc-400 text-sm">
-              <span>{t('listeners', { count: formatNum(artist.listeners) })}</span>
-              <span>{t('plays', { count: formatNum(artist.playcount) })}</span>
-            </div>
+
             {tags.length > 0 && (
               <div className="flex flex-wrap gap-2 pt-1">
                 {tags.map((tag) => (
@@ -146,8 +148,34 @@ export default async function ArtistPage({
         {/* Bio */}
         {bio && (
           <section>
-            <h2 className="text-lg font-semibold mb-2">{t('about')}</h2>
-            <p className="text-zinc-400 text-sm leading-relaxed max-w-2xl">{bio}</p>
+            <h2 className="text-lg font-semibold mb-4">{t('about')}</h2>
+            <p className="text-zinc-400 text-sm leading-relaxed">{bio}</p>
+
+            {/* Stat cards */}
+            {(() => {
+              const listeners = parseInt(artist.listeners, 10)
+              const plays = parseInt(artist.playcount, 10)
+              const ratio = listeners > 0 ? (plays / listeners).toFixed(1) : null
+              return (
+                <div className="grid grid-cols-3 gap-3 my-4">
+                  <div className="bg-zinc-900 rounded-lg p-4">
+                    <p className="text-xs text-zinc-500 uppercase tracking-wide mb-1">Listeners</p>
+                    <p className="text-white font-bold text-xl">{formatNum(artist.stats.listeners)}</p>
+                  </div>
+                  <div className="bg-zinc-900 rounded-lg p-4">
+                    <p className="text-xs text-zinc-500 uppercase tracking-wide mb-1">Plays</p>
+                    <p className="text-white font-bold text-xl">{formatNum(artist.stats.playcount)}</p>
+                  </div>
+                  {ratio && (
+                    <div className="bg-zinc-900 rounded-lg p-4">
+                      <p className="text-xs text-zinc-500 uppercase tracking-wide mb-1">Plays / Listener</p>
+                      <p className="text-white font-bold text-xl">{ratio}x</p>
+                    </div>
+                  )}
+                </div>
+              )
+            })()}
+
           </section>
         )}
 

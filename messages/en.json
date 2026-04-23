@@ -12,6 +12,7 @@
   },
   "Artist": {
     "about": "About",
+    "bio": "Biography",
     "topTracks": "Top Tracks",
     "similarArtists": "Similar Artists",
     "back": "← Back to charts",

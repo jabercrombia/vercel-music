@@ -12,6 +12,7 @@
   },
   "Artist": {
     "about": "Informazioni",
+    "bio": "Biografia",
     "topTracks": "Brani Più Ascoltati",
     "similarArtists": "Artisti Simili",
     "back": "← Torna alle classifiche",

@@ -1,14 +1,7 @@
 import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import type { Track } from '@/lib/lastfm'
-
-function formatListeners(n: string) {
-  const num = parseInt(n, 10)
-  if (isNaN(num)) return n
-  if (num >= 1_000_000) return `${(num / 1_000_000).toFixed(1)}M`
-  if (num >= 1_000) return `${(num / 1_000).toFixed(0)}K`
-  return `${num}`
-}
+import { formatCount } from '@/lib/format'
 
 export default async function TrackList({ tracks }: { tracks: Track[] }) {
   if (tracks.length === 0) return null
@@ -34,7 +27,7 @@ export default async function TrackList({ tracks }: { tracks: Track[] }) {
                 <p className="text-zinc-400 text-sm truncate">{track.artist.name}</p>
               </div>
               <span className="text-zinc-500 text-xs shrink-0 hidden sm:block">
-                {formatListeners(track.listeners)}
+                {formatCount(track.listeners)}
               </span>
             </Link>
           </li>
