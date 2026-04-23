@@ -39,9 +39,11 @@ export function proxy(req: NextRequest) {
 }
 
 function detectLocale(req: NextRequest, isoCode: string): string {
+  // IP country takes priority — the app is geo-focused so location drives locale.
+  if (isoToLocale[isoCode]) return isoToLocale[isoCode]
+
+  // Fall back to Accept-Language when the IP country has no locale mapping (e.g. US, GB).
   const acceptLang = req.headers.get('accept-language') ?? ''
-  // Parse "fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7" into primary language tags sorted by quality.
-  // A plain includes() check incorrectly matches "en" inside "fr-FR,...,en-US" strings.
   const preferred = acceptLang
     .split(',')
     .map((part) => {
@@ -55,8 +57,7 @@ function detectLocale(req: NextRequest, isoCode: string): string {
     if ((routing.locales as readonly string[]).includes(lang)) return lang
   }
 
-  // Fall back to locale inferred from IP country when Accept-Language has no match.
-  return isoToLocale[isoCode] ?? routing.defaultLocale
+  return routing.defaultLocale
 }
 
 // Run middleware only on the root URL and locale-prefixed routes.
