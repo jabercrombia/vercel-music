@@ -12,6 +12,7 @@
   },
   "Artist": {
     "about": "Acerca de",
+    "bio": "Biografía",
     "topTracks": "Canciones Más Populares",
     "similarArtists": "Artistas Similares",
     "back": "← Volver a las listas",
