@@ -1,0 +1,21 @@
+{
+  "Hero": {
+    "badge": "Globale Musikkrender",
+    "heading": "Trender i {country}",
+    "subheading": "Topp låter og artister oppdatert hver time"
+  },
+  "Charts": {
+    "topTracks": "Topp Låter",
+    "topArtists": "Topp Artister",
+    "noData": "Ingen listedata tilgjengelig for denne regionen ennå.",
+    "browseByCountry": "Bla etter land:"
+  },
+  "Artist": {
+    "about": "Om",
+    "topTracks": "Topp Låter",
+    "similarArtists": "Lignende Artister",
+    "back": "← Tilbake til listene",
+    "listeners": "{count} lyttere",
+    "plays": "{count} avspillinger"
+  }
+}

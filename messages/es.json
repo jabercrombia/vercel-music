@@ -1,0 +1,21 @@
+{
+  "Hero": {
+    "badge": "Tendencias Musicales Globales",
+    "heading": "Tendencias en {country}",
+    "subheading": "Los mejores temas y artistas actualizados cada hora"
+  },
+  "Charts": {
+    "topTracks": "Canciones Más Populares",
+    "topArtists": "Artistas Más Populares",
+    "noData": "Aún no hay datos de listas disponibles para esta región.",
+    "browseByCountry": "Explorar por país:"
+  },
+  "Artist": {
+    "about": "Acerca de",
+    "topTracks": "Canciones Más Populares",
+    "similarArtists": "Artistas Similares",
+    "back": "← Volver a las listas",
+    "listeners": "{count} oyentes",
+    "plays": "{count} reproducciones"
+  }
+}
