@@ -17,6 +17,11 @@
     "similarArtists": "Artisti Simili",
     "back": "← Torna alle classifiche",
     "listeners": "{count} ascoltatori",
-    "plays": "{count} riproduzioni"
+    "plays": "{count} riproduzioni",
+    "listenersLabel": "Ascoltatori",
+    "playsLabel": "Riproduzioni",
+    "playsPerListener": "Riproduzioni / Ascoltatore",
+    "playsPerListen": "{ratio} riproduzioni per ascolto",
+    "perListen": "riproduzioni per ascolto"
   }
 }
