@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Global Music Trends
 
-## Getting Started
+Real-time music charts personalized by country and language, powered by the Last.fm API and Vercel Edge.
 
-First, run the development server:
+## How it works
+
+When a visitor hits `/`, Vercel Edge Middleware (`proxy.ts`) reads their country from the `x-vercel-ip-country` header and their preferred language from `Accept-Language`, then rewrites the request directly to `/[locale]/trends/[country]` — no redirect, no round-trip. Chart data is cached with ISR and regenerated in the background once per hour.
+
+Clicking an artist opens an internal page (`/[locale]/artist/[name]`) with bio, top tracks, genre tags, and similar artists. The bio is translated by Last.fm using the active locale.
+
+## Tech stack
+
+- **Next.js 16** (App Router, ISR, React Suspense)
+- **Vercel** — edge middleware, ISR cache
+- **Last.fm API** — chart data and artist info
+- **next-intl** — locale routing and UI translations (`en`, `es`, `no`, `it`)
+- **Tailwind CSS v4**
+- **TypeScript**
+
+## Getting started
+
+**1. Get a Last.fm API key**
+
+Create a free key at [last.fm/api/account/create](https://www.last.fm/api/account/create).
+
+**2. Add your key to `.env.local`**
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+LASTFM_API_KEY=your_api_key_here
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**3. Install and run**
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm install
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Open [http://localhost:3000](http://localhost:3000). You'll be redirected to `/en/trends/united-states` (locale and country are detected automatically on Vercel; local dev defaults to US/English).
 
-## Learn More
+## Supported countries and locales
 
-To learn more about Next.js, take a look at the following resources:
+| Country | Slug | Locale |
+|---|---|---|
+| United States | `united-states` | `en` |
+| United Kingdom | `united-kingdom` | `en` |
+| Australia | `australia` | `en` |
+| Mexico | `mexico` | `es` |
+| Spain | `spain` | `es` |
+| Norway | `norway` | `no` |
+| Italy | `italy` | `it` |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Routes
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Route | Description |
+|---|---|
+| `/` | Edge rewrite to `/[locale]/trends/[country]` |
+| `/[locale]/trends/[country]` | Top tracks and artists for a country |
+| `/[locale]/artist/[name]` | Artist detail — bio, top tracks, similar artists |
 
-## Deploy on Vercel
+## Docs
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- [Overview](doc/overview.md) — problem, solution, and key decisions
+- [Architecture](doc/architecture.md) — tech stack, system diagram, i18n, and caching strategy
+- [API Reference](doc/api.md) — endpoints, types, and environment variables
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Deployment
+
+Deploy to Vercel with one command:
+
+```bash
+vercel deploy
+```
+
+Set `LASTFM_API_KEY` in **Vercel Dashboard → Project → Settings → Environment Variables**. Edge middleware runs automatically — no extra configuration needed.
