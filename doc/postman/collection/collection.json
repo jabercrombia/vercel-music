@@ -1,0 +1,82 @@
+{
+  "info": {
+    "name": "Last.fm",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Geo List",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://ws.audioscrobbler.com/2.0/?method=geo.getTopTracks&country=france&api_key={{apiKey}}&format=json&lang=es",
+          "protocol": "https",
+          "host": ["ws", "audioscrobbler", "com"],
+          "path": ["2.0"],
+          "query": [
+            {
+              "key": "method",
+              "value": "geo.getTopTracks"
+            },
+            {
+              "key": "country",
+              "value": "france"
+            },
+            {
+              "key": "api_key",
+              "value": "{{apiKey}}"
+            },
+            {
+              "key": "format",
+              "value": "json"
+            },
+            {
+              "key": "lang",
+              "value": "es"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Artist",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=Drake&api_key={{apiKey}}&format=json",
+          "protocol": "https",
+          "host": ["ws", "audioscrobbler", "com"],
+          "path": ["2.0"],
+          "query": [
+            {
+              "key": "method",
+              "value": "artist.getinfo"
+            },
+            {
+              "key": "artist",
+              "value": "Drake"
+            },
+            {
+              "key": "api_key",
+              "value": "{{apiKey}}"
+            },
+            {
+              "key": "format",
+              "value": "json"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "apiKey",
+      "value": ""
+    }
+  ]
+}
