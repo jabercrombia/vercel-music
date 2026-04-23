@@ -61,9 +61,17 @@ Open [http://localhost:3000](http://localhost:3000). You'll be redirected to `/e
 
 ## Docs
 
-- [Overview](doc/overview.md) — problem, solution, and key decisions
-- [Architecture](doc/architecture.md) — tech stack, system diagram, i18n, and caching strategy
-- [API Reference](doc/api.md) — endpoints, types, and environment variables
+Full documentation is available at `/docs/` (served by Next.js MDX from `app/docs/`).
+
+| Route | Source | Description |
+|---|---|---|
+| `/docs` | [app/docs/page.mdx](app/docs/page.mdx) | Landing page |
+| `/docs/overview` | [app/docs/overview/page.mdx](app/docs/overview/page.mdx) | Problem, solution, and key decisions |
+| `/docs/architecture` | [app/docs/architecture/page.mdx](app/docs/architecture/page.mdx) | Tech stack, system diagram, i18n, and caching |
+| `/docs/api` | [app/docs/api/page.mdx](app/docs/api/page.mdx) | Endpoints, types, and environment variables |
+| `/docs/seo` | [app/docs/seo/page.mdx](app/docs/seo/page.mdx) | Metadata, OG images, structured data, hreflang |
+
+To add a new doc page, create `app/docs/<name>/page.mdx` and add the route to the nav in `app/docs/layout.tsx`.
 
 ## Deployment
 
