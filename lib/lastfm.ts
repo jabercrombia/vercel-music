@@ -61,7 +61,7 @@ function slugToName(slug: string): string {
 export async function getTopTracks(countrySlug: string): Promise<Track[]> {
   const country = slugToName(countrySlug)
   const res = await fetch(
-    `${BASE}?method=geo.getTopTracks&country=${encodeURIComponent(country)}&api_key=${KEY}&format=json&limit=20`,
+    `${BASE}?method=geo.getTopTracks&country=${encodeURIComponent(country)}&api_key=${KEY}&format=json&limit=10`,
     { next: { revalidate: 3600 } }
   )
   const data = await res.json()
