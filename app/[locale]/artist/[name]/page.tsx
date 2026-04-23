@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { getArtistInfo, getArtistTopTracks } from '@/lib/lastfm'
 import { notFound } from 'next/navigation'
@@ -41,6 +41,7 @@ export default async function ArtistPage({
   params: Promise<{ locale: string; name: string }>
 }) {
   const { locale, name } = await params
+  setRequestLocale(locale)
   const artistName = decodeURIComponent(name)
   const t = await getTranslations('Artist')
 
