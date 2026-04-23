@@ -6,6 +6,7 @@ export const isoToLastfm: Record<string, string> = {
   ES: 'spain',
   NO: 'norway',
   IT: 'italy',
+  FR: 'france',
 }
 
 // use single quotes because hpyens are treated as minus
@@ -17,6 +18,7 @@ export const countryDisplayNames: Record<string, string> = {
   spain: 'Spain',
   norway: 'Norway',
   italy: 'Italy',
+  france: 'France',
 }
 
 export const countryFlags: Record<string, string> = {
@@ -27,4 +29,5 @@ export const countryFlags: Record<string, string> = {
   spain: '🇪🇸',
   norway: '🇳🇴',
   italy: '🇮🇹',
+  france: '🇫🇷',
 }

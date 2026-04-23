@@ -1,0 +1,21 @@
+{
+  "Hero": {
+    "badge": "Tendances Musicales Mondiales",
+    "heading": "Tendances en {country}",
+    "subheading": "Les meilleures chansons et artistes mis à jour chaque heure"
+  },
+  "Charts": {
+    "topTracks": "Titres Populaires",
+    "topArtists": "Artistes Populaires",
+    "noData": "Aucune donnée de classement disponible pour cette région.",
+    "browseByCountry": "Parcourir par pays :"
+  },
+  "Artist": {
+    "about": "À propos",
+    "topTracks": "Titres Populaires",
+    "similarArtists": "Artistes Similaires",
+    "back": "← Retour aux classements",
+    "listeners": "{count} auditeurs",
+    "plays": "{count} écoutes"
+  }
+}

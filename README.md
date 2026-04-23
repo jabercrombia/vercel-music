@@ -13,7 +13,7 @@ Clicking an artist opens an internal page (`/[locale]/artist/[name]`) with bio, 
 - **Next.js 16** (App Router, ISR, React Suspense)
 - **Vercel** — edge middleware, ISR cache
 - **Last.fm API** — chart data and artist info
-- **next-intl** — locale routing and UI translations (`en`, `es`, `no`, `it`)
+- **next-intl** — locale routing and UI translations (`en`, `es`, `fr`, `no`, `it`)
 - **Tailwind CSS v4**
 - **TypeScript**
 
@@ -49,6 +49,7 @@ Open [http://localhost:3000](http://localhost:3000). You'll be redirected to `/e
 | Spain | `spain` | `es` |
 | Norway | `norway` | `no` |
 | Italy | `italy` | `it` |
+| France | `france` | `fr` |
 
 ## Routes
 
