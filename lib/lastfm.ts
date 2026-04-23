@@ -17,10 +17,8 @@ export interface Artist {
 }
 
 export interface ArtistInfo {
-  stats: any
   name: string
-  listeners: string
-  playcount: string
+  stats: { listeners: string; playcount: string }
   url: string
   image: { '#text': string; size: string }[]
   bio: { summary: string; content: string }

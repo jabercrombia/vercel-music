@@ -16,11 +16,14 @@ function getLargestImage(images: { '#text': string; size: string }[]): string {
 }
 
 function formatNum(n: string) {
-  const num = parseInt(n, 8)
+  const num = parseInt(n, 10)
   if (isNaN(num)) return n
-  if (num >= 1_000_000) return `${(num / 1_000_000).toFixed(1)}M`
-  if (num >= 1_000) return `${(num / 1_000).toFixed(0)}K`
-  return `${num}`
+  if (num >= 1_000_000) {
+    const val = num / 1_000_000
+    return `${val % 1 === 0 ? val.toFixed(0) : val.toFixed(1)}M`
+  }
+  if (num >= 1_000) return `${Math.round(num / 1_000)}K`
+  return num.toLocaleString()
 }
 
 function stripHtml(html: string) {
@@ -153,8 +156,8 @@ export default async function ArtistPage({
 
             {/* Stat cards */}
             {(() => {
-              const listeners = parseInt(artist.listeners, 10)
-              const plays = parseInt(artist.playcount, 10)
+              const listeners = parseInt(artist.stats.listeners, 10)
+              const plays = parseInt(artist.stats.playcount, 10)
               const ratio = listeners > 0 ? (plays / listeners).toFixed(1) : null
               return (
                 <div className="grid grid-cols-3 gap-3 my-4">
@@ -169,7 +172,7 @@ export default async function ArtistPage({
                   {ratio && (
                     <div className="bg-zinc-900 rounded-lg p-4">
                       <p className="text-xs text-zinc-500 uppercase tracking-wide mb-1">Plays / Listener</p>
-                      <p className="text-white font-bold text-xl">{ratio}x</p>
+                      <p className="text-white font-bold text-xl">{ratio} <span className="text-xs font-light">plays per listener</span></p>
                     </div>
                   )}
                 </div>
