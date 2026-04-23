@@ -57,15 +57,15 @@ export default async function ArtistPage({
   const tags = artist.tags?.tag?.slice(0, 5) ?? []
 
   return (
-    <main className="min-h-screen bg-[#0a0a0a] text-white">
+    <main className="min-h-screen bg-background text-foreground">
       <div className="max-w-5xl mx-auto px-4 py-10 space-y-10">
 
-        <Link href="/" className="text-zinc-500 hover:text-white text-sm transition-colors">
+        <Link href="/" className="text-muted-foreground hover:text-foreground text-sm transition-colors">
           {t('back')}
         </Link>
 
         {/* Hero */}
-        <div className="flex flex-col sm:flex-row gap-6 items-start">
+        <div className="flex flex-col sm:flex-row gap-6 items-start mt-4">
           <div className="relative w-40 h-40 shrink-0 rounded-lg overflow-hidden bg-zinc-800">
             {imageUrl ? (
               <Image src={imageUrl} alt={artist.name} fill className="object-cover" sizes="160px" />
@@ -75,14 +75,14 @@ export default async function ArtistPage({
           </div>
           <div className="space-y-2">
             <h1 className="text-4xl font-bold">{artist.name}</h1>
-            <div className="flex gap-4 text-zinc-400 text-sm">
+            <div className="flex gap-4 text-muted-foreground text-sm">
               <span>{t('listeners', { count: formatNum(artist.listeners) })}</span>
               <span>{t('plays', { count: formatNum(artist.playcount) })}</span>
             </div>
             {tags.length > 0 && (
               <div className="flex flex-wrap gap-2 pt-1">
                 {tags.map((tag) => (
-                  <span key={tag.name} className="px-2 py-0.5 bg-zinc-800 rounded text-xs text-zinc-300">
+                  <span key={tag.name} className="px-2 py-0.5 bg-muted rounded text-xs text-foreground/70">
                     {tag.name}
                   </span>
                 ))}
@@ -95,7 +95,7 @@ export default async function ArtistPage({
         {bio && (
           <section>
             <h2 className="text-lg font-semibold mb-2">{t('about')}</h2>
-            <p className="text-zinc-400 text-sm leading-relaxed max-w-2xl">{bio}</p>
+            <p className="text-muted-foreground text-sm leading-relaxed max-w-2xl">{bio}</p>
           </section>
         )}
 
@@ -105,13 +105,13 @@ export default async function ArtistPage({
             <h2 className="text-lg font-semibold mb-3">{t('topTracks')}</h2>
             <ol className="space-y-2">
               {topTracks.map((track, i) => (
-                <li key={`${track.name}-${i}`} className="flex items-center gap-4 p-3 rounded-lg bg-zinc-900">
-                  <span className="text-zinc-500 text-sm font-mono w-6 text-right shrink-0">{i + 1}</span>
+                <li key={`${track.name}-${i}`} className="flex items-center gap-4 p-3 rounded-lg bg-card">
+                  <span className="text-muted-foreground text-sm font-mono w-6 text-right shrink-0">{i + 1}</span>
                   <div className="flex-1 min-w-0">
-                    <p className="text-white font-medium truncate">{track.name}</p>
+                    <p className="text-foreground font-medium truncate">{track.name}</p>
                   </div>
                   {'playcount' in track && (
-                    <span className="text-zinc-500 text-xs shrink-0 hidden sm:block">
+                    <span className="text-muted-foreground text-xs shrink-0 hidden sm:block">
                       {t('plays', { count: formatNum((track as { playcount: string }).playcount) })}
                     </span>
                   )}
@@ -130,7 +130,7 @@ export default async function ArtistPage({
                 <Link
                   key={s.name}
                   href={`/artist/${encodeURIComponent(s.name)}`}
-                  className="px-4 py-2 bg-zinc-900 hover:bg-zinc-800 rounded-lg text-sm text-white transition-colors"
+                  className="px-4 py-2 bg-card hover:bg-muted rounded-lg text-sm text-foreground transition-colors"
                 >
                   {s.name}
                 </Link>

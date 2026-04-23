@@ -26,7 +26,7 @@ export default async function ArtistGrid({ artists }: { artists: Artist[] }) {
 
   return (
     <section>
-      <h2 className="text-xl font-bold text-white mb-4">{t('topArtists')}</h2>
+      <h2 className="text-xl font-bold text-foreground mb-4">{t('topArtists')}</h2>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
         {artists.map((artist, i) => {
           const imageUrl = getLargestImage(artist.image)
@@ -34,9 +34,9 @@ export default async function ArtistGrid({ artists }: { artists: Artist[] }) {
             <Link
               key={`${artist.name}-${i}`}
               href={`/artist/${encodeURIComponent(artist.name)}`}
-              className="group bg-zinc-900 rounded-lg overflow-hidden hover:bg-zinc-800 transition-colors"
+              className="group bg-card rounded-lg overflow-hidden hover:bg-muted transition-colors"
             >
-              <div className="relative aspect-square bg-zinc-800">
+              <div className="relative aspect-square bg-muted">
                 {imageUrl ? (
                   <Image
                     src={imageUrl}
@@ -46,16 +46,16 @@ export default async function ArtistGrid({ artists }: { artists: Artist[] }) {
                     sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                   />
                 ) : (
-                  <div className="absolute inset-0 flex items-center justify-center text-4xl text-zinc-600">
+                  <div className="absolute inset-0 flex items-center justify-center text-4xl text-muted-foreground">
                     🎤
                   </div>
                 )}
               </div>
               <div className="p-3">
-                <p className="text-white font-medium text-sm truncate group-hover:text-[#e4132d] transition-colors">
+                <p className="text-foreground font-medium text-sm truncate group-hover:text-primary transition-colors">
                   {artist.name}
                 </p>
-                <p className="text-zinc-500 text-xs mt-0.5">
+                <p className="text-muted-foreground text-xs mt-0.5">
                   {formatListeners(artist.listeners)}
                 </p>
               </div>

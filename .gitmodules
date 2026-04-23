@@ -1,0 +1,3 @@
+[submodule "ai-agent-ux-design"]
+	path = ai-agent-ux-design
+	url = https://github.com/jabercrombia/ai-agent-ux-design
