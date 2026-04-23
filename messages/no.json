@@ -17,6 +17,11 @@
     "similarArtists": "Lignende Artister",
     "back": "← Tilbake til listene",
     "listeners": "{count} lyttere",
-    "plays": "{count} avspillinger"
+    "plays": "{count} avspillinger",
+    "listenersLabel": "Lyttere",
+    "playsLabel": "Avspillinger",
+    "playsPerListener": "Avspillinger / Lytter",
+    "playsPerListen": "{ratio} avspillinger per lytting",
+    "perListen": "avspillinger per lytting"
   }
 }

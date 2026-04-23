@@ -160,19 +160,19 @@ export default async function ArtistPage({
               const plays = parseInt(artist.stats.playcount, 10)
               const ratio = listeners > 0 ? (plays / listeners).toFixed(1) : null
               return (
-                <div className="grid grid-cols-3 gap-3 my-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 my-4">
                   <div className="bg-zinc-900 rounded-lg p-4">
-                    <p className="text-xs text-zinc-500 uppercase tracking-wide mb-1">Listeners</p>
+                    <p className="text-xs text-zinc-500 uppercase tracking-wide mb-1">{t('listenersLabel')}</p>
                     <p className="text-white font-bold text-xl">{formatNum(artist.stats.listeners)}</p>
                   </div>
                   <div className="bg-zinc-900 rounded-lg p-4">
-                    <p className="text-xs text-zinc-500 uppercase tracking-wide mb-1">Plays</p>
+                    <p className="text-xs text-zinc-500 uppercase tracking-wide mb-1">{t('playsLabel')}</p>
                     <p className="text-white font-bold text-xl">{formatNum(artist.stats.playcount)}</p>
                   </div>
                   {ratio && (
                     <div className="bg-zinc-900 rounded-lg p-4">
-                      <p className="text-xs text-zinc-500 uppercase tracking-wide mb-1">Plays / Listener</p>
-                      <p className="text-white font-bold text-xl">{ratio} <span className="text-xs font-light">plays per listener</span></p>
+                      <p className="text-xs text-zinc-500 uppercase tracking-wide mb-1">{t('playsPerListener')}</p>
+                      <p className="text-white font-bold text-xl">{ratio} <span className="text-xs font-normal text-zinc-400">{t('perListen')}</span></p>
                     </div>
                   )}
                 </div>

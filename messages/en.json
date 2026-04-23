@@ -17,6 +17,11 @@
     "similarArtists": "Similar Artists",
     "back": "← Back to charts",
     "listeners": "{count} listeners",
-    "plays": "{count} plays"
+    "plays": "{count} plays",
+    "listenersLabel": "Listeners",
+    "playsLabel": "Plays",
+    "playsPerListener": "Plays / Listener",
+    "playsPerListen": "{ratio} plays per listen",
+    "perListen": "plays per listen"
   }
 }
