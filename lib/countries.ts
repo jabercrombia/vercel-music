@@ -1,7 +1,7 @@
 export const isoToLastfm: Record<string, string> = {
   US: 'united-states',
   GB: 'united-kingdom',
-  AU: 'australia',
+  DE: 'germany',
   MX: 'mexico',
   ES: 'spain',
   NO: 'norway',
@@ -13,7 +13,7 @@ export const isoToLastfm: Record<string, string> = {
 export const countryDisplayNames: Record<string, string> = {
   'united-states': 'United States',
   'united-kingdom': 'United Kingdom',
-  australia: 'Australia',
+  germany: 'Germany',
   mexico: 'Mexico',
   spain: 'Spain',
   norway: 'Norway',
@@ -24,7 +24,7 @@ export const countryDisplayNames: Record<string, string> = {
 export const countryFlags: Record<string, string> = {
   'united-states': '🇺🇸',
   'united-kingdom': '🇬🇧',
-  australia: '🇦🇺',
+  germany: '🇩🇪',
   mexico: '🇲🇽',
   spain: '🇪🇸',
   norway: '🇳🇴',

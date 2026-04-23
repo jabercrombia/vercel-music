@@ -1,0 +1,21 @@
+{
+  "Hero": {
+    "badge": "Globale Musiktrends",
+    "heading": "Trends in {country}",
+    "subheading": "Top-Tracks und Künstler, stündlich aktualisiert"
+  },
+  "Charts": {
+    "topTracks": "Top-Tracks",
+    "topArtists": "Top-Künstler",
+    "noData": "Für diese Region sind noch keine Chartdaten verfügbar.",
+    "browseByCountry": "Nach Land durchsuchen:"
+  },
+  "Artist": {
+    "about": "Über",
+    "topTracks": "Top-Tracks",
+    "similarArtists": "Ähnliche Künstler",
+    "back": "← Zurück zu den Charts",
+    "listeners": "{count} Hörer",
+    "plays": "{count} Wiedergaben"
+  }
+}
