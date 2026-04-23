@@ -1,56 +1,39 @@
 {
   "info": {
-    "_postman_id": "baa0d0b0-7295-42bd-98dd-533eb6cd6dbd",
     "name": "Last.fm",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "29391751"
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
     {
       "name": "Geo List",
       "request": {
-        "auth": {
-          "type": "noauth"
-        },
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "https://ws.audioscrobbler.com/2.0/?method=geo.getTopTracks&country=france&api_key=api_key&format=json&lang=es",
+          "raw": "https://ws.audioscrobbler.com/2.0/?method=geo.getTopTracks&country=france&api_key={{apiKey}}&format=json&lang=es",
           "protocol": "https",
-          "host": [
-            "ws",
-            "audioscrobbler",
-            "com"
-          ],
-          "path": [
-            "2.0",
-            ""
-          ],
+          "host": ["ws", "audioscrobbler", "com"],
+          "path": ["2.0"],
           "query": [
             {
               "key": "method",
-              "value": "geo.getTopTracks",
-              "type": "text"
+              "value": "geo.getTopTracks"
             },
             {
               "key": "country",
-              "value": "france",
-              "type": "text"
+              "value": "france"
             },
             {
               "key": "api_key",
-              "value": "api_key",
-              "type": "text"
+              "value": "{{apiKey}}"
             },
             {
               "key": "format",
-              "value": "json",
-              "type": "text"
+              "value": "json"
             },
             {
               "key": "lang",
-              "value": "es",
-              "type": "text"
+              "value": "es"
             }
           ]
         }
@@ -63,17 +46,10 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "https://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=Drake&api_key=YOUR_API_KEY&format=json",
+          "raw": "https://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=Drake&api_key={{apiKey}}&format=json",
           "protocol": "https",
-          "host": [
-            "ws",
-            "audioscrobbler",
-            "com"
-          ],
-          "path": [
-            "2.0",
-            ""
-          ],
+          "host": ["ws", "audioscrobbler", "com"],
+          "path": ["2.0"],
           "query": [
             {
               "key": "method",
@@ -85,7 +61,7 @@
             },
             {
               "key": "api_key",
-              "value": "YOUR_API_KEY"
+              "value": "{{apiKey}}"
             },
             {
               "key": "format",
@@ -100,8 +76,7 @@
   "variable": [
     {
       "key": "apiKey",
-      "value": "",
-      "type": "default"
+      "value": ""
     }
   ]
 }
