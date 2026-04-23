@@ -32,5 +32,5 @@ function detectLocale(req: NextRequest): string {
 }
 
 export const config = {
-  matcher: ['/', '/(en|es|no|it)/:path*'],
+  matcher: ['/', '/(en|es|no|it|fr)/:path*'],
 }
