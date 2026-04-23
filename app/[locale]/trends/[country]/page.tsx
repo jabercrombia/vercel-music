@@ -2,6 +2,7 @@ import { Suspense } from 'react'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { getTopTracks, getTopArtists } from '@/lib/lastfm'
 import { countryDisplayNames } from '@/lib/countries'
+import { routing } from '@/i18n/routing'
 import NowTrendingHero from '@/components/NowTrendingHero'
 import CountrySelector from '@/components/CountrySelector'
 import TrackList from '@/components/TrackList'
@@ -9,6 +10,12 @@ import ArtistGrid from '@/components/ArtistGrid'
 import TrackSkeleton from '@/components/TrackSkeleton'
 
 export const revalidate = 3600
+
+export function generateStaticParams() {
+  return Object.keys(countryDisplayNames).flatMap((country) =>
+    routing.locales.map((locale) => ({ locale, country }))
+  )
+}
 
 export async function generateMetadata({
   params,
@@ -18,8 +25,31 @@ export async function generateMetadata({
   const { locale, country } = await params
   const t = await getTranslations({ locale, namespace: 'Hero' })
   const displayName = countryDisplayNames[country] ?? country
+  const title = t('heading', { country: displayName })
+  const description = `Top trending tracks and artists in ${displayName}. Real-time music charts powered by Last.fm.`
+  const url = `/${locale}/trends/${country}`
+
+  const alternateLanguages = Object.fromEntries(
+    routing.locales.map((l) => [l, `/${l}/trends/${country}`])
+  )
+
   return {
-    title: `${t('heading', { country: displayName })} — Global Music Trends`,
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url,
+      type: 'website' as const,
+    },
+    twitter: {
+      title,
+      description,
+    },
+    alternates: {
+      canonical: url,
+      languages: alternateLanguages,
+    },
   }
 }
 

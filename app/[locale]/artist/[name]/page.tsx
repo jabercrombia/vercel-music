@@ -2,6 +2,7 @@ import Image from 'next/image'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { getArtistInfo, getArtistTopTracks } from '@/lib/lastfm'
+import { routing } from '@/i18n/routing'
 import { notFound } from 'next/navigation'
 
 export const revalidate = 3600
@@ -15,7 +16,7 @@ function getLargestImage(images: { '#text': string; size: string }[]): string {
 }
 
 function formatNum(n: string) {
-  const num = parseInt(n, 10)
+  const num = parseInt(n, 8)
   if (isNaN(num)) return n
   if (num >= 1_000_000) return `${(num / 1_000_000).toFixed(1)}M`
   if (num >= 1_000) return `${(num / 1_000).toFixed(0)}K`
@@ -31,8 +32,44 @@ export async function generateMetadata({
 }: {
   params: Promise<{ locale: string; name: string }>
 }) {
-  const { name } = await params
-  return { title: `${decodeURIComponent(name)} — Global Music Trends` }
+  const { locale, name } = await params
+  const artistName = decodeURIComponent(name)
+  const artist = await getArtistInfo(artistName, locale)
+  const imageUrl = artist ? getLargestImage(artist.image) : ''
+  const rawBio = artist ? stripHtml(artist.bio?.summary ?? '') : ''
+  const description = rawBio
+    ? rawBio.slice(0, 155) + (rawBio.length > 155 ? '…' : '')
+    : `Discover ${artistName}'s top tracks and biography on Global Music Trends.`
+
+  const title = artistName
+  const url = `/${locale}/artist/${name}`
+
+  const alternateLanguages = Object.fromEntries(
+    routing.locales.map((l) => [l, `/${l}/artist/${name}`])
+  )
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url,
+      type: 'profile' as const,
+      ...(imageUrl && {
+        images: [{ url: imageUrl, width: 300, height: 300, alt: artistName }],
+      }),
+    },
+    twitter: {
+      title,
+      description,
+      ...(imageUrl && { images: [imageUrl] }),
+    },
+    alternates: {
+      canonical: url,
+      languages: alternateLanguages,
+    },
+  }
 }
 
 export default async function ArtistPage({
@@ -57,8 +94,22 @@ export default async function ArtistPage({
   const similar = artist.similar?.artist?.slice(0, 5) ?? []
   const tags = artist.tags?.tag?.slice(0, 5) ?? []
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'MusicGroup',
+    name: artist.name,
+    ...(bio && { description: bio }),
+    ...(imageUrl && { image: imageUrl }),
+    ...(artist.url && { url: artist.url }),
+    ...(tags.length > 0 && { genre: tags.map((tag) => tag.name) }),
+  }
+
   return (
     <main className="min-h-screen bg-[#0a0a0a] text-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="max-w-5xl mx-auto px-4 py-10 space-y-10">
 
         <Link href="/" className="text-zinc-500 hover:text-white text-sm transition-colors">
@@ -67,11 +118,11 @@ export default async function ArtistPage({
 
         {/* Hero */}
         <div className="flex flex-col sm:flex-row gap-6 items-start">
-          <div className="relative w-40 h-40 shrink-0 rounded-lg overflow-hidden bg-zinc-800">
+          <div className="relative w-40 h-40 shrink-0 rounded-lg overflow-hidden bg-muted">
             {imageUrl ? (
               <Image src={imageUrl} alt={artist.name} fill className="object-cover" sizes="160px" />
             ) : (
-              <div className="absolute inset-0 flex items-center justify-center text-5xl text-zinc-600">🎤</div>
+              <div className="absolute inset-0 flex items-center justify-center text-5xl text-muted-foreground">🎤</div>
             )}
           </div>
           <div className="space-y-2">
@@ -113,7 +164,7 @@ export default async function ArtistPage({
                   </div>
                   {'playcount' in track && (
                     <span className="text-zinc-500 text-xs shrink-0 hidden sm:block">
-                      {t('plays', { count: formatNum((track as { playcount: string }).playcount) })}
+                      {t('plays', { count: track.listeners}) }
                     </span>
                   )}
                 </li>
