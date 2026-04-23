@@ -1,5 +1,5 @@
 import { Suspense } from 'react'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { getTopTracks, getTopArtists } from '@/lib/lastfm'
 import { countryDisplayNames } from '@/lib/countries'
 import NowTrendingHero from '@/components/NowTrendingHero'
@@ -28,7 +28,8 @@ export default async function TrendsPage({
 }: {
   params: Promise<{ locale: string; country: string }>
 }) {
-  const { country } = await params
+  const { locale, country } = await params
+  setRequestLocale(locale)
   const t = await getTranslations('Charts')
 
   const [tracks, artists] = await Promise.all([

@@ -1,4 +1,5 @@
 import { getTranslations } from 'next-intl/server'
+import { Link } from '@/i18n/navigation'
 import type { Track } from '@/lib/lastfm'
 
 function formatListeners(n: string) {
@@ -19,10 +20,8 @@ export default async function TrackList({ tracks }: { tracks: Track[] }) {
       <ol className="space-y-2">
         {tracks.map((track, i) => (
           <li key={`${track.name}-${i}`}>
-            <a
-              href={track.url}
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href={`/artist/${encodeURIComponent(track.artist.name)}`}
               className="flex items-center gap-4 p-3 rounded-lg bg-zinc-900 hover:bg-zinc-800 transition-colors group"
             >
               <span className="text-zinc-500 text-sm font-mono w-6 text-right shrink-0">
@@ -37,7 +36,7 @@ export default async function TrackList({ tracks }: { tracks: Track[] }) {
               <span className="text-zinc-500 text-xs shrink-0 hidden sm:block">
                 {formatListeners(track.listeners)}
               </span>
-            </a>
+            </Link>
           </li>
         ))}
       </ol>
