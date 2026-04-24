@@ -1,3 +1,5 @@
+import { cacheLife } from 'next/cache'
+
 const BASE = 'https://ws.audioscrobbler.com/2.0/'
 const KEY = process.env.LASTFM_API_KEY
 
@@ -27,10 +29,12 @@ export interface ArtistInfo {
 }
 
 export async function getArtistInfo(name: string, lang?: string): Promise<ArtistInfo | null> {
+  'use cache'
+  cacheLife('hours')
+
   const langParam = lang ? `&lang=${encodeURIComponent(lang)}` : ''
   const res = await fetch(
-    `${BASE}?method=artist.getInfo&artist=${encodeURIComponent(name)}&api_key=${KEY}&format=json${langParam}`,
-    { next: { revalidate: 3600 } }
+    `${BASE}?method=artist.getInfo&artist=${encodeURIComponent(name)}&api_key=${KEY}&format=json${langParam}`
   )
   const data = await res.json()
   if (data?.error) {
@@ -41,9 +45,11 @@ export async function getArtistInfo(name: string, lang?: string): Promise<Artist
 }
 
 export async function getArtistTopTracks(name: string): Promise<Track[]> {
+  'use cache'
+  cacheLife('hours')
+
   const res = await fetch(
-    `${BASE}?method=artist.getTopTracks&artist=${encodeURIComponent(name)}&api_key=${KEY}&format=json&limit=10`,
-    { next: { revalidate: 3600 } }
+    `${BASE}?method=artist.getTopTracks&artist=${encodeURIComponent(name)}&api_key=${KEY}&format=json&limit=10`
   )
   const data = await res.json()
   if (data?.error) {
@@ -58,10 +64,12 @@ function slugToName(slug: string): string {
 }
 
 export async function getTopTracks(countrySlug: string): Promise<Track[]> {
+  'use cache'
+  cacheLife('hours')
+
   const country = slugToName(countrySlug)
   const res = await fetch(
-    `${BASE}?method=geo.getTopTracks&country=${encodeURIComponent(country)}&api_key=${KEY}&format=json&limit=10`,
-    { next: { revalidate: 3600 } }
+    `${BASE}?method=geo.getTopTracks&country=${encodeURIComponent(country)}&api_key=${KEY}&format=json&limit=10`
   )
   const data = await res.json()
   if (data?.error) {
@@ -72,10 +80,12 @@ export async function getTopTracks(countrySlug: string): Promise<Track[]> {
 }
 
 export async function getTopArtists(countrySlug: string): Promise<Artist[]> {
+  'use cache'
+  cacheLife('hours')
+
   const country = slugToName(countrySlug)
   const res = await fetch(
-    `${BASE}?method=geo.getTopArtists&country=${encodeURIComponent(country)}&api_key=${KEY}&format=json&limit=8`,
-    { next: { revalidate: 3600 } }
+    `${BASE}?method=geo.getTopArtists&country=${encodeURIComponent(country)}&api_key=${KEY}&format=json&limit=8`
   )
   const data = await res.json()
   if (data?.error) {

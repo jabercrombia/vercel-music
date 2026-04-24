@@ -9,6 +9,7 @@ const withMDX = createMDX({})
 const nextConfig: NextConfig = {
   experimental: {
     mdxRs: { mdxType: 'gfm' },
+    useCache: true,
   },
 
   images: {
