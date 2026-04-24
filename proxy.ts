@@ -26,9 +26,9 @@ export function proxy(req: NextRequest) {
   if (pathname === '/') {
     // Detect country and locale at the edge, then rewrite directly to the trends page.
     // This avoids a two-step redirect (/ → /[locale] → /[locale]/trends/[country]).
-    const isoCode = req.headers.get('x-vercel-ip-country') ?? 'US'
-    const countrySlug = isoToLastfm[isoCode] ?? 'united-states'
-    const locale = detectLocale(req, isoCode)
+    const isoCode = req.headers.get('x-vercel-ip-country') ?? 'US' //get isoCode
+    const countrySlug = isoToLastfm[isoCode] ?? 'united-states' // get country name
+    const locale = detectLocale(req, isoCode) 
 
     const url = req.nextUrl.clone()
     url.pathname = `/${locale}/trends/${countrySlug}`
@@ -43,6 +43,7 @@ function detectLocale(req: NextRequest, isoCode: string): string {
   if (isoToLocale[isoCode]) return isoToLocale[isoCode]
 
   // Fall back to Accept-Language when the IP country has no locale mapping (e.g. US, GB).
+  // This is available in every browser
   const acceptLang = req.headers.get('accept-language') ?? ''
   const preferred = acceptLang
     .split(',')
@@ -53,6 +54,9 @@ function detectLocale(req: NextRequest, isoCode: string): string {
     .sort((a, b) => b.q - a.q)
     .map(({ lang }) => lang)
 
+  // Loop through the user's languages in priority order (highest q score first).
+  // Return the first language the app supports. If none match, fall back to the default locale (en).
+  // Example: user sends ['fr', 'en'] → returns 'fr'. User sends ['ja', 'zh'] → returns 'en'.
   for (const lang of preferred) {
     if ((routing.locales as readonly string[]).includes(lang)) return lang
   }

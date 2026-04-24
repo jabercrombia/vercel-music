@@ -5,6 +5,7 @@ import { getArtistInfo, getArtistTopTracks } from '@/lib/lastfm'
 import { routing } from '@/i18n/routing'
 import { notFound } from 'next/navigation'
 
+// ISR: cache is per-URL, so each locale × artist combination is independently revalidated
 export const revalidate = 3600
 
 function getLargestImage(images: { '#text': string; size: string }[]): string {
@@ -38,10 +39,13 @@ function cleanBio(text: string): string {
 export async function generateMetadata({
   params,
 }: {
+  // Next.js 15+: params is a Promise and must be awaited before use
   params: Promise<{ locale: string; name: string }>
 }) {
   const { locale, name } = await params
   const artistName = decodeURIComponent(name)
+  // Next.js deduplicates identical fetch calls within the same render, so this
+  // doesn't make a second network request — it shares the cache with the page render
   const artist = await getArtistInfo(artistName, locale)
   const imageUrl = artist ? getLargestImage(artist.image) : ''
   const rawBio = artist ? stripHtml(artist.bio?.summary ?? '') : ''
@@ -90,8 +94,9 @@ export default async function ArtistPage({
   const artistName = decodeURIComponent(name)
   const t = await getTranslations('Artist')
 
+  // run api calls at the same time
   const [artist, topTracks] = await Promise.all([
-    getArtistInfo(artistName, locale),
+    getArtistInfo(artistName, locale), // locale drives Last.fm's bio language
     getArtistTopTracks(artistName),
   ])
 
