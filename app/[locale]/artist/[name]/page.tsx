@@ -1,11 +1,12 @@
+import { Suspense } from 'react'
 import Image from 'next/image'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
-import { getArtistInfo, getArtistTopTracks } from '@/lib/lastfm'
+import { getArtistInfo } from '@/lib/lastfm'
 import { routing } from '@/i18n/routing'
 import { notFound } from 'next/navigation'
-
-export const revalidate = 3600
+import ArtistTopTracks, { TracksSkeleton } from '@/components/ArtistTopTracks'
+import ArtistConcerts, { ConcertsSkeleton } from '@/components/ArtistConcerts'
 
 function getLargestImage(images: { '#text': string; size: string }[]): string {
   for (const size of ['extralarge', 'large', 'medium', 'small']) {
@@ -38,10 +39,13 @@ function cleanBio(text: string): string {
 export async function generateMetadata({
   params,
 }: {
+  // Next.js 15+: params is a Promise and must be awaited before use
   params: Promise<{ locale: string; name: string }>
 }) {
   const { locale, name } = await params
   const artistName = decodeURIComponent(name)
+  // Next.js deduplicates identical fetch calls within the same render, so this
+  // doesn't make a second network request — it shares the cache with the page render
   const artist = await getArtistInfo(artistName, locale)
   const imageUrl = artist ? getLargestImage(artist.image) : ''
   const rawBio = artist ? stripHtml(artist.bio?.summary ?? '') : ''
@@ -90,10 +94,8 @@ export default async function ArtistPage({
   const artistName = decodeURIComponent(name)
   const t = await getTranslations('Artist')
 
-  const [artist, topTracks] = await Promise.all([
-    getArtistInfo(artistName, locale),
-    getArtistTopTracks(artistName),
-  ])
+  // Only getArtistInfo blocks the hero — tracks and concerts stream in via Suspense
+  const artist = await getArtistInfo(artistName, locale)
 
   if (!artist) notFound()
 
@@ -182,27 +184,15 @@ export default async function ArtistPage({
           </section>
         )}
 
-        {/* Top Tracks */}
-        {topTracks.length > 0 && (
-          <section>
-            <h2 className="text-lg font-semibold mb-3">{t('topTracks')}</h2>
-            <ol className="space-y-2">
-              {topTracks.map((track, i) => (
-                <li key={`${track.name}-${i}`} className="flex items-center gap-4 p-3 rounded-lg bg-zinc-900">
-                  <span className="text-zinc-500 text-sm font-mono w-6 text-right shrink-0">{i + 1}</span>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-white font-medium truncate">{track.name}</p>
-                  </div>
-                  {'playcount' in track && (
-                    <span className="text-zinc-500 text-xs shrink-0 hidden sm:block">
-                      {t('plays', { count: track.listeners}) }
-                    </span>
-                  )}
-                </li>
-              ))}
-            </ol>
-          </section>
-        )}
+        {/* Top Tracks — streams in independently */}
+        <Suspense fallback={<TracksSkeleton />}>
+          <ArtistTopTracks artistName={artistName} playsLabel={t('playsLabel')} />
+        </Suspense>
+
+        {/* Concerts — streams in independently */}
+        <Suspense fallback={<ConcertsSkeleton />}>
+          <ArtistConcerts artistName={artistName} />
+        </Suspense>
 
         {/* Similar Artists */}
         {similar.length > 0 && (
